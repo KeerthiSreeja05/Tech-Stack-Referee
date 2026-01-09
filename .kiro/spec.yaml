@@ -1,0 +1,441 @@
+name: Tech Stack Referee
+version: 1.0.0
+challenge: Kiro Heroes – Week 6 ("The Referee")
+description: A neutral AI referee that compares multiple tech stack options, evaluates them under the same constraints, explains trade-offs clearly, and avoids one-size-fits-all answers.
+
+# Project Overview
+overview: |
+  Tech Stack Referee is a premium SaaS application designed to help developers make confident technical decisions 
+  by comparing multiple tech stack options, explaining trade-offs, and guiding reasoning—never forcing a single answer.
+  
+  The application acts as a neutral referee, providing objective analysis based on project constraints and requirements,
+  while maintaining transparency about trade-offs and avoiding biased recommendations.
+
+# Core Capabilities
+capabilities:
+  - constraint_analysis: Analyze project requirements and constraints
+  - stack_comparison: Compare multiple technology stacks objectively
+  - trade_off_evaluation: Explain pros/cons and trade-offs clearly
+  - neutral_reasoning: Provide unbiased analysis without declaring winners
+  - contextual_recommendations: Suggest options based on specific scenarios
+  - risk_assessment: Evaluate long-term risks and considerations
+  - interactive_chat: Answer follow-up questions about decisions
+
+# Input Specifications
+inputs:
+  project_constraints:
+    type: object
+    required: true
+    description: Project requirements and constraints that guide the comparison
+    properties:
+      project_type:
+        type: string
+        enum: [web-app, mobile, api, full-stack]
+        description: Type of application being built
+        
+      team_expertise:
+        type: array
+        items:
+          type: string
+          enum: [javascript, python, typescript, react, backend, none]
+        description: Technologies the team is comfortable with
+        
+      expected_scale:
+        type: integer
+        minimum: 0
+        maximum: 100
+        description: Expected user scale percentage (0-100)
+        
+      budget_sensitivity:
+        type: string
+        enum: [low, moderate, high]
+        description: How important cost optimization is to the project
+        
+      timeline:
+        type: string
+        enum: [short, medium, long]
+        description: Project timeline constraints
+        
+      experience_level:
+        type: string
+        enum: [beginner, intermediate, expert]
+        description: Team's overall technical experience level
+
+  tech_stack_selection:
+    type: array
+    items:
+      type: string
+    description: List of technology stack IDs to compare
+    default: [react, nodejs, mongodb, express]
+    
+  comparison_criteria:
+    type: object
+    description: Criteria for evaluating and comparing stacks
+    properties:
+      learning_curve:
+        type: boolean
+        default: true
+        description: Consider ease of learning and adoption
+        
+      scalability:
+        type: boolean
+        default: true
+        description: Evaluate scaling capabilities
+        
+      community_support:
+        type: boolean
+        default: true
+        description: Assess community size and support
+        
+      performance:
+        type: boolean
+        default: true
+        description: Consider performance characteristics
+        
+      cost_factors:
+        type: boolean
+        default: true
+        description: Evaluate cost implications
+
+# Decision Logic Framework
+decision_logic:
+  constraint_weighting:
+    description: How different constraints influence recommendations
+    rules:
+      - if: project_type == "web-app" AND experience_level == "beginner"
+        then: prioritize_ease_of_use
+        weight: 0.4
+        
+      - if: expected_scale > 70
+        then: prioritize_scalability
+        weight: 0.5
+        
+      - if: budget_sensitivity == "high"
+        then: prioritize_cost_efficiency
+        weight: 0.3
+        
+      - if: timeline == "short"
+        then: prioritize_rapid_development
+        weight: 0.4
+
+  stack_evaluation:
+    description: How individual stacks are evaluated
+    metrics:
+      learning_curve:
+        scale: [easy: 90, medium: 70, hard: 40]
+        description: Inverse difficulty score
+        
+      scalability:
+        scale: [low: 40, medium: 70, high: 90]
+        description: Scaling capability score
+        
+      community:
+        scale: [small: 40, medium: 70, large: 90]
+        description: Community support score
+        
+      performance:
+        scale: [low: 40, medium: 70, high: 90]
+        description: Performance capability score
+
+  comparison_algorithm:
+    description: Multi-criteria decision analysis approach
+    steps:
+      1. normalize_scores: Convert all metrics to 0-100 scale
+      2. apply_weights: Apply constraint-based weighting
+      3. calculate_composite: Generate weighted composite scores
+      4. identify_trade_offs: Highlight key differences
+      5. generate_scenarios: Create context-specific recommendations
+
+# Scoring Rules
+scoring:
+  composite_score:
+    formula: |
+      (learning_curve * learning_weight) + 
+      (scalability * scalability_weight) + 
+      (community * community_weight) + 
+      (performance * performance_weight)
+    
+  risk_assessment:
+    factors:
+      - maturity_level: [new: high_risk, stable: medium_risk, mature: low_risk]
+      - community_size: [small: high_risk, medium: medium_risk, large: low_risk]
+      - vendor_dependency: [high: high_risk, medium: medium_risk, low: low_risk]
+      
+  suitability_matching:
+    use_case_alignment:
+      weight: 0.3
+      description: How well the stack matches intended use cases
+      
+    team_expertise_match:
+      weight: 0.25
+      description: Alignment with team's existing skills
+      
+    constraint_satisfaction:
+      weight: 0.25
+      description: How well it meets project constraints
+      
+    ecosystem_maturity:
+      weight: 0.2
+      description: Maturity and stability of the ecosystem
+
+# Referee Behavior Guidelines
+referee_behavior:
+  neutrality_principles:
+    - never_declare_single_winner: Always present multiple viable options
+    - acknowledge_trade_offs: Explicitly state what you gain vs lose
+    - context_dependent: Emphasize that "best" depends on specific needs
+    - avoid_absolutes: Use conditional language ("if X, then Y works well")
+    
+  communication_style:
+    tone: neutral, analytical, helpful
+    approach: comparative_analysis
+    language: clear, non-technical when possible
+    structure: pros_cons_scenarios
+    
+  decision_guidance:
+    provide_scenarios: "If your priority is X, then Y works well because..."
+    explain_reasoning: Always explain why a recommendation makes sense
+    highlight_risks: Be transparent about potential challenges
+    suggest_validation: Recommend prototyping or proof-of-concepts
+    
+  bias_prevention:
+    avoid_vendor_favoritism: Don't favor popular or sponsored technologies
+    consider_alternatives: Always mention alternative approaches
+    acknowledge_limitations: Be honest about what the analysis cannot determine
+    encourage_testing: Suggest hands-on evaluation for final decisions
+
+# Output Structure
+outputs:
+  comparison_matrix:
+    type: object
+    description: Side-by-side comparison of selected stacks
+    structure:
+      stacks:
+        type: array
+        items:
+          stack_name: string
+          category: string
+          description: string
+          pros: array[string]
+          cons: array[string]
+          use_cases: array[string]
+          metrics:
+            learning_curve: integer
+            scalability: integer
+            community: integer
+            performance: integer
+          risk_level: string[low|medium|high]
+          
+  referee_insights:
+    type: object
+    description: Neutral analysis and trade-off explanations
+    structure:
+      key_trade_offs:
+        type: array
+        items:
+          trade_off: string
+          explanation: string
+          
+      scenario_recommendations:
+        type: array
+        items:
+          scenario: string
+          recommended_stack: string
+          reasoning: string
+          
+      decision_factors:
+        type: array
+        items:
+          factor: string
+          importance: string
+          impact_on_choice: string
+          
+  risk_analysis:
+    type: object
+    description: Long-term risk assessment for each option
+    structure:
+      technical_risks:
+        type: array
+        items:
+          stack: string
+          risks: array[string]
+          mitigation: array[string]
+          
+      business_risks:
+        type: array
+        items:
+          stack: string
+          risks: array[string]
+          impact: string
+          
+  contextual_recommendations:
+    type: object
+    description: Recommendations based on specific project context
+    structure:
+      primary_recommendation:
+        stack: string
+        confidence: integer
+        reasoning: string
+        
+      alternative_options:
+        type: array
+        items:
+          stack: string
+          when_to_choose: string
+          trade_offs: string
+
+# Agent Steering Configuration
+agent_steering:
+  core_directives:
+    - maintain_neutrality: Never declare a single "best" option
+    - explain_trade_offs: Always highlight what you gain vs lose
+    - provide_context: Explain when each option makes sense
+    - encourage_validation: Suggest prototyping before final decisions
+    
+  response_patterns:
+    comparison_format: |
+      "Each stack excels in different scenarios:
+      - If [condition], then [stack] works well because [reason]
+      - However, you'll trade [downside] for [benefit]
+      - Consider [alternative] if [different_condition]"
+      
+    decision_guidance: |
+      "The choice depends on your priorities:
+      - For [priority_1]: [stack_1] offers [benefit] but requires [trade_off]
+      - For [priority_2]: [stack_2] provides [benefit] at the cost of [trade_off]
+      - Test both approaches with a small prototype to validate fit"
+      
+  prohibited_responses:
+    - declaring_winners: "X is the best choice"
+    - absolute_statements: "You should always use Y"
+    - dismissing_options: "Z is never a good choice"
+    - oversimplifying: "Just use the most popular one"
+
+# Comparative Reasoning Framework
+comparative_reasoning:
+  analysis_dimensions:
+    - technical_capabilities: What each stack can and cannot do
+    - implementation_complexity: How difficult each is to implement
+    - maintenance_burden: Long-term maintenance requirements
+    - scaling_characteristics: How each handles growth
+    - ecosystem_maturity: Available tools, libraries, and support
+    - team_alignment: Fit with existing team skills and preferences
+    
+  trade_off_categories:
+    flexibility_vs_structure:
+      description: Freedom to customize vs opinionated frameworks
+      examples: [Express.js vs Django, React vs Angular]
+      
+    speed_vs_control:
+      description: Rapid development vs fine-grained control
+      examples: [Firebase vs custom backend, Bootstrap vs custom CSS]
+      
+    learning_vs_power:
+      description: Ease of adoption vs advanced capabilities
+      examples: [SQLite vs PostgreSQL, Vue vs React]
+      
+    cost_vs_features:
+      description: Budget constraints vs feature richness
+      examples: [Open source vs commercial, Cloud vs self-hosted]
+
+# Explainability Requirements
+explainability:
+  decision_transparency:
+    show_scoring: Display how scores were calculated
+    explain_weights: Show how constraints influenced weighting
+    highlight_assumptions: Make assumptions explicit
+    provide_alternatives: Always show other viable options
+    
+  reasoning_clarity:
+    use_examples: Provide concrete examples and use cases
+    avoid_jargon: Explain technical terms when necessary
+    structure_logically: Present information in logical flow
+    summarize_key_points: Highlight most important considerations
+    
+  uncertainty_acknowledgment:
+    identify_unknowns: Acknowledge what cannot be determined
+    suggest_validation: Recommend ways to test assumptions
+    highlight_risks: Be transparent about potential issues
+    encourage_iteration: Suggest revisiting decisions as projects evolve
+
+# Quality Assurance
+quality_metrics:
+  neutrality_score:
+    description: Measure of how balanced the analysis is
+    calculation: Variance in recommendation confidence across options
+    target: Low variance (no single option heavily favored)
+    
+  explanation_completeness:
+    description: Coverage of key decision factors
+    requirements: [pros, cons, use_cases, trade_offs, risks]
+    target: All factors addressed for each option
+    
+  contextual_relevance:
+    description: How well recommendations match project constraints
+    measurement: Alignment between constraints and suggested options
+    target: High correlation between constraints and recommendations
+
+# Integration Points
+integrations:
+  knowledge_base:
+    tech_stack_database: Comprehensive information about technologies
+    best_practices: Industry best practices and patterns
+    real_world_examples: Case studies and success stories
+    
+  ai_services:
+    google_gemini: Enhanced analysis and natural language generation
+    fallback_logic: Rule-based analysis when AI unavailable
+    
+  user_interface:
+    constraint_wizard: Step-by-step constraint gathering
+    comparison_dashboard: Visual comparison interface
+    chat_interface: Interactive Q&A system
+
+# Success Criteria
+success_criteria:
+  user_confidence:
+    metric: User reports feeling confident about their decision
+    target: 85% of users report increased confidence
+    
+  decision_quality:
+    metric: Alignment between recommendations and project outcomes
+    measurement: Follow-up surveys on project success
+    
+  neutrality_maintenance:
+    metric: No single technology consistently over-recommended
+    measurement: Distribution of recommendations across options
+    
+  explanation_clarity:
+    metric: Users understand the reasoning behind recommendations
+    target: 90% of users can explain why option was suggested
+
+# Deployment Configuration
+deployment:
+  environment_variables:
+    GOOGLE_AI_API_KEY: Optional Google Gemini API key for enhanced analysis
+    
+  feature_flags:
+    ai_enhanced_analysis: Enable/disable AI-powered insights
+    advanced_scoring: Enable/disable complex scoring algorithms
+    
+  monitoring:
+    recommendation_distribution: Track which stacks are recommended most
+    user_satisfaction: Monitor user feedback and ratings
+    decision_outcomes: Track long-term success of recommendations
+
+# Documentation Requirements
+documentation:
+  user_guides:
+    - constraint_definition: How to define project constraints effectively
+    - interpretation_guide: How to interpret comparison results
+    - decision_framework: Framework for making final technology choices
+    
+  technical_docs:
+    - scoring_algorithms: Detailed explanation of scoring methodology
+    - knowledge_base: Documentation of tech stack information
+    - ai_integration: How AI enhances the analysis process
+    
+  examples:
+    - sample_comparisons: Example comparisons for different project types
+    - decision_scenarios: Real-world decision-making scenarios
+    - best_practices: Best practices for using the referee system

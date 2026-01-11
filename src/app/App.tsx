@@ -8,6 +8,7 @@ import { RAGComparisonTab } from './components/RAGComparisonTab';
 import { RefereeInsightTab } from './components/RefereeInsightTab';
 import { RisksTab } from './components/RisksTab';
 import { RAGChatTab } from './components/RAGChatTab';
+import { HomePage } from './components/HomePage';
 import logo from '../assets/0cf99c5569f9132448cd9853ee36a6bcb8766b2f.png';
 
 /**
@@ -26,6 +27,7 @@ import logo from '../assets/0cf99c5569f9132448cd9853ee36a6bcb8766b2f.png';
  */
 
 export default function App() {
+  const [showHomePage, setShowHomePage] = useState(true);
   const [activeTab, setActiveTab] = useState('constraints');
   const [hasCompared, setHasCompared] = useState(false);
   const [constraints, setConstraints] = useState<any>(null);
@@ -106,6 +108,14 @@ export default function App() {
     setSelectedStacks([]);
     setActiveTab('constraints');
   };
+
+  const handleGetStarted = () => {
+    setShowHomePage(false);
+  };
+
+  if (showHomePage) {
+    return <HomePage onGetStarted={handleGetStarted} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-[#F8FAFC] to-[#E8F0FE]">
@@ -224,7 +234,9 @@ export default function App() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <a
-                href="#"
+                href="https://github.com/login"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-sm text-[#64748B] hover:text-[#1F4FD8] transition-colors flex items-center gap-2"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -233,7 +245,9 @@ export default function App() {
                 GitHub
               </a>
               <a
-                href="#"
+                href="https://github.com/KeerthiSreeja05/Tech-Stack-Referee/blob/main/README.md"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-sm text-[#64748B] hover:text-[#1F4FD8] transition-colors flex items-center gap-2"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
